@@ -96,11 +96,32 @@ ggvis(df, props(x = ~x, y = ~y, text := ~labels, font = ~labels, fontSize := 40)
   scale_ordinal("font", range = c("Helvetica Neue", "Times New Roman"))
 
 ggvis(mtcars, props(y = ~mpg)) +
-  layer_point(props(x = prop(~disp, scale = "xdisp"))) +
+  layer_point(props(x = prop(~disp, scale = "xdisp"), fill := "tomato")) +
   layer_point(props(x = prop(~wt, scale = "xwt"), fill := "blue")) +
   dscale("x", "numeric", name = "xdisp") +
   dscale("x", "numeric", name = "xwt") +
   guide_axis("x", "xdisp", orient = "bottom") +
-  guide_axis("x", "xwt", orient = "bottom", offset = 20, properties =
-               list(labels = props(fill := "blue")))
+  guide_axis("x", "xwt", orient = "top", offset = 0, properties =
+               list(labels = props(fill := "yellow")))
+
+
+ggvis(df, props(x = ~x, y = ~y, text := ~labels, font = ~labels, stroke = ~labels, fill = ~labels, fontSize := 40)) +
+  layer_text() +
+  scale_ordinal("font", range = c("Helvetica Neue", "Times New Roman")) +
+#   scale(name="stroke", range="category10", reverse=F) +
+  scale(name="fill", range="category20", reverse=TRUE)
+
+# Discrete colours for fill and a manual scale for opacity
+ggvis(mtcars, props(x = ~wt, y = ~mpg, fill = ~factor(cyl), fillOpacity = ~hp)) +
+  layer_point() +
+  dscale("opacity", "numeric", range = c(0.2, 1))
+
+# https://github.com/rstudio/ggvis/blob/master/demo/scales.r
+# Unscaled values in the data
+mtc <- mtcars
+mtc$color <- c("red", "teal", "#cccccc", "tan")
+ggvis(mtc, props(x = ~wt, y = ~mpg, fill := ~color)) + layer_point()
+
+# Unscaled constant
+ggvis(mtcars, props(x = ~wt, y = ~mpg, fill := "red")) + layer_point()
 
